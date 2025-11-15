@@ -1,5 +1,10 @@
-# base defines a base stage that uses the official python runtime base image
+# Base defines a base stage that uses the official python runtime base image
 FROM python:3.11-slim
+
+# Metadata
+LABEL maintainer="BACHA Radouane <narlechitane38200@gmail.com>
+version="1.0" \
+      description="Image Flask pour gérer la liste des étudiants"
 
 #Create the directory /data
 RUN mkdir -p /data
@@ -8,7 +13,9 @@ RUN mkdir -p /data
 VOLUME ["/data"]
 
 # Install Flask engine for our API
-RUN apt update -y && apt install -y python3 python3-pip python3-dev build-essential libsasl2-dev libldap2-dev libssl-dev -y
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential python3-dev libsasl2-dev libldap2-dev libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Add our source code
 COPY student_age.py /student_age.py
@@ -23,3 +30,4 @@ EXPOSE 5000
 
 # Define our command to be run when launching the container
 CMD [ "python3", "./student_age.py" ]
+
