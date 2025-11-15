@@ -2,15 +2,9 @@
 FROM python:3.11-slim
 
 # Metadata
-LABEL maintainer="BACHA Radouane <narlechitane38200@gmail.com>
-version="1.0" \
-      description="Image Flask pour gérer la liste des étudiants"
+LABEL maintainer="BACHA Radouane <narlechitane38200@gmail.com>"
 
-#Create the directory /data
-RUN mkdir -p /data
-
-#Add volume /data
-VOLUME ["/data"]
+COPY student_age.json /data/student_age.json
 
 # Install Flask engine for our API
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,6 +16,7 @@ COPY student_age.py /student_age.py
 
 # Install our requirements.txt
 COPY requirements.txt /requirements.txt
+RUN pip3 install --upgrade pip
 RUN pip3 install -r /requirements.txt
 
 
@@ -30,4 +25,3 @@ EXPOSE 5000
 
 # Define our command to be run when launching the container
 CMD [ "python3", "./student_age.py" ]
-
