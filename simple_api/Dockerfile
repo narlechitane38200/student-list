@@ -1,5 +1,5 @@
 # base defines a base stage that uses the official python runtime base image
-FROM python:3.11-slim AS base
+FROM python:3.11-slim
 
 #Create the directory /data
 RUN mkdir -p /data
@@ -8,16 +8,14 @@ RUN mkdir -p /data
 VOLUME ["/data"]
 
 # Install Flask engine for our API
-RUN apt-get update && \
-    pt install python-dev python3-dev libsasl2-dev python-dev libldap2-dev libssl-dev -y
-    rm -rf /var/lib/apt/lists/*
+RUN apt update -y && apt install -y python3 python3-pip python3-dev build-essential libsasl2-dev libldap2-dev libssl-dev -y
 
 # Add our source code
 COPY student_age.py /student_age.py
 
 # Install our requirements.txt
 COPY requirements.txt /requirements.txt
-pip3 install -r /requirements.txt
+RUN pip3 install -r /requirements.txt
 
 
 # Make port 5000 available for links and/or publish
